@@ -1,34 +1,19 @@
-# std threads
-find_package(Threads REQUIRED)
-
-# find boost libraries
-set(Boost_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost COMPONENTS system date_time filesystem REQUIRED)
-
-# additional includes
-include_directories(${Boost_INCLUDE_DIRS})
-
 add_definitions(-std=c++14)
 
-# main library cpp files
-file(GLOB SRC_FILES
+# main library
+set(TEST_EXECUTABLE_NAME "testall")
+
+# server executable
+file(GLOB TEST_FILES
 	"*.cpp"
 )
 
-file(GLOB INCLUDE_FILES
-	"*.h"
-)
-
-add_library(
-	${DRIVER_NAME}
-	SHARED
-	${SRC_FILES}
-	${INCLUDE_FILES}
+add_executable(
+	${TEST_EXECUTABLE_NAME}
+	${TEST_FILES}
 )
 
 target_link_libraries(
+	${TEST_EXECUTABLE_NAME}
 	${DRIVER_NAME}
-	${CMAKE_THREAD_LIBS_INIT}
-	${Boost_LIBRARIES}
 )
