@@ -1,18 +1,22 @@
 #pragma once
 
-#include "input.h"
+#include <epoxy/gl.h>
+
+#include "../os/v4l.h"
+#include "ffmpeg.h"
 
 namespace video {
 
 class texture {
 public:
 	texture();
+	~texture();
 
-	void update();
+	void update(AVFrame *frame);
 
 private:
-	float pixels[640 * 480 * 3];
-	capture_source video_src;
+	GLuint tex;
+	char pixels[1000 * 768 * 3];
 };
 
 }

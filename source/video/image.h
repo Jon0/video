@@ -5,32 +5,15 @@
 
 namespace video {
 
-enum io_method {
-		IO_METHOD_READ,
-		IO_METHOD_MMAP,
-		IO_METHOD_USERPTR,
+// shader textures
+// input and output image formats
+
+struct format {
+	int width;
+	int height;
+	int color;
 };
 
-struct buffer {
-		void   *start;
-		size_t  length;
-};
-
-struct capture_source {
-	int fd; 
-	std::vector<buffer> buffers;
-};
-
-class device {
-public:
-	device(const std::string &dev_path)
-		:
-		path(dev_path) {
-
-	}
-
-	const std::string path;
-};
 
 template<typename T>
 class image {
@@ -61,7 +44,5 @@ public:
 	const int width, height;
 };
 
-capture_source open_device(const device &d);
-image<short> read_frame(const capture_source &source);
 
 }

@@ -8,6 +8,7 @@
 
 namespace video {
 
+
 void sdl_init() {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -17,6 +18,7 @@ void sdl_init() {
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 }
 
+
 std::string get_src_path() {
 	std::ifstream text("src_path");
 	std::stringstream ss;
@@ -24,6 +26,7 @@ std::string get_src_path() {
 	std::string src_path = ss.str();
 	return src_path.substr(0, src_path.length() - 1);
 }
+
 
 renderer::renderer()
 	:
@@ -38,11 +41,12 @@ renderer::renderer()
 	glLinkProgram(program);
 	glUseProgram(program);
 
+	float size = 1.0f;
 	float vertices[] = {
-    -0.5f,  0.5f, 0.0f, 0.0f, // Top-left
-     0.5f,  0.5f, 1.0f, 0.0f, // Top-right
-     0.5f, -0.5f, 1.0f, 1.0f, // Bottom-right
-    -0.5f, -0.5f, 0.0f, 1.0f  // Bottom-left
+	-size,  size, 0.0f, 0.0f, // Top-left
+	 size,  size, 1.0f, 0.0f, // Top-right
+	 size, -size, 1.0f, 1.0f, // Bottom-right
+	-size, -size, 0.0f, 1.0f  // Bottom-left
 };
 
 	GLuint vbo;
@@ -73,19 +77,24 @@ renderer::renderer()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 }
 
-void renderer::draw() {
-	tx.update();
+
+void renderer::draw(AVFrame *frame) {
+	tx.update(frame);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
+
 window::window() {
+	std::pair<int, int> size = {60, 60}; //vs.size();
+
+	// init opengl and create window
 	sdl_init();
 	sdl_window = SDL_CreateWindow(
 		"window",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		800,
-		600,
+		size.first,
+		size.second,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
 	);
 	gl_context = SDL_GL_CreateContext(sdl_window);
@@ -101,9 +110,9 @@ window::~window() {
 }
 
 void window::update() {
-	glClearColor(0.0, 0.2, 0.3, 0.0);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
-	rd->draw();
+	//rd->draw(vs.get_image());
 	SDL_GL_SwapWindow(sdl_window);
 }
 

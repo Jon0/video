@@ -15,7 +15,9 @@ class renderer {
 public:
 	renderer();
 
-	void draw();
+	void draw(AVFrame *frame);
+
+	std::pair<int, int> size() const;
 
 private:
 	std::string src_path;
